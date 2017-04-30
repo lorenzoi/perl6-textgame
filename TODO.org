@@ -1,0 +1,2 @@
+* TODO [#A] Put Class Room and UsrCMD Loop in their own files.
+* TODO [#B] Add Human + more Classes for Inventories Shops and Attacking

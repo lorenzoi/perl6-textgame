@@ -1,0 +1,16 @@
+* Perl Text Game (Working title)
+
+** Running
+To run type 
+#+BEGIN_SRC bash
+$ ./run.sh
+#+END_SRC
+into your terminal
+
+or if that does not work
+#+BEGIN_SRC bash
+$ sh run.sh
+#+END_SRC
+
+** Contributions
+I consider all Contributions as a pontential future of the source, so feel free to fork and add stuff!
