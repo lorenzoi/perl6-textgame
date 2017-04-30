@@ -1,1 +1,1 @@
-perl6 src/main
+perl6 src/main.p6
