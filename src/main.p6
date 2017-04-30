@@ -34,6 +34,7 @@
         }
     }
     my $room = Room.new(False, False, False, False)
+    say $room;
 }
 
 # Variables
