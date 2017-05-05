@@ -48,11 +48,23 @@ class Room {
 class Creature {
     has $.name;
     has $.health;
-    has $.strenght;
+    has $.strength;
 
     # Methods
     method new ($name, $health, $strength) {
         self.bless(:$name, :$health, :$strength)
+    }
+
+    method lose_health ($amount) {
+        $!health = $!health - $amount
+    }
+    
+    method attack ($creature) {
+        my $amount = ($!strength / 10) * 3;
+        $creature.lose_health($amount);
+    }
+    method getHealth {
+        return $!health
     }
 }
 
@@ -69,7 +81,7 @@ class Human is Creature {
 
 ## Player Sub-Class
 
-class Player is Human {
+class Player is Creature {
     method getUsrCMD($rm, %rmhex) {
 
         my Str $cmd;            # Force $cmd to be a String
@@ -83,9 +95,7 @@ class Player is Human {
             $cmd = get;
 
             given $cmd {
-                when "quit" { $loop = False };
-
-                when "exit" { die "Exited!" };
+                when "quit" | "exit" | "^D" { $loop = False };
                 # when EOF  { $loop = False };
 
                 when "look" {
@@ -93,12 +103,13 @@ class Player is Human {
                     say $rm.getDesc();
                 };
 
-                when "n" {
+                when "n" | "north" {
                     given $rm.getExit("north") {
                         when Str {
                             say colored("\nYou're now in " ~ $rm.getExit("north") ~ "\n", "bold green");
                             my $north = $rm.getExit("north");
                             Player.getUsrCMD(%rmhex{$north}, %rmhex);
+                            $loop = False;
                         }
                         default {
                             say colored("\nYou cannot go this direction.\n", "bold red")
@@ -106,12 +117,13 @@ class Player is Human {
                     }
                 }
                 
-                when "s" {
+                when "s" | "south" {
                     given $rm.getExit("south") {
                         when Str {
                             say colored("\nYou're now in " ~ $rm.getExit("south") ~ "\n", "bold green");
                             my $south = $rm.getExit("south");
                             Player.getUsrCMD(%rmhex{$south}, %rmhex);
+                            $loop = False;
                         }
                         default {
                             say colored("\nYou cannot go this direction.\n", "bold red");
@@ -119,12 +131,13 @@ class Player is Human {
                     }
                 }
                 
-                when "e" {
+                when "e" | "east" {
                     given $rm.getExit("east") { 
                         when Str {
                             say colored("\nYou're now in " ~ $rm.getExit("east") ~ "\n", "bold green");
                             my $east = $rm.getExit("east");
                             Player.getUsrCMD(%rmhex{$east}, %rmhex);
+                            $loop = False;
                         }
                         default {
                             say colored("\nYou cannot go this direction.\n", "bold red")
@@ -132,17 +145,25 @@ class Player is Human {
                     }
                 }
                 
-                when "w" {
+                when "w" | "west" {
                     given $rm.getExit("west") {
                         when Str {
                             say colored("\nYou're now in " ~ $rm.getExit("west") ~ "\n", "bold green");
                             my $west = $rm.getExit("west");
                             Player.getUsrCMD(%rmhex{$west}, %rmhex);
+                            $loop = False;
                         }
                         default {
                             say colored("\nYou cannot go this direction.\n", "bold red")
                         }
                     }
+                }
+                when "health" {
+                    say Player.getHealth;
+                }
+
+                when "damage" {
+                    say Player.lose_health(3);
                 }
                 
                 default {say "Undefined"};
